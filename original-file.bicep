@@ -33,6 +33,38 @@ var hostingPlanName = 'hostingplan${uniqueString(resourceGroup().id)}'
 var sqlserverName = 'toywebsite${uniqueString(resourceGroup().id)}'
 var storageAccountName = 'toywebsite${uniqueString(resourceGroup().id)}'
 
+var cosmosDBContainerDefinitions = [
+  {
+    name: 'customers'
+    partitionKey: '/customerId'
+  }
+  {
+    name: 'orders'
+    partitionKey: '/orderId'
+  }
+  {
+    name: 'products'
+    partitionKey: '/productId'
+  }
+]
+
+resource cosmosDBContainers 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2020-04-01' = [for cosmosDBContainerDefinition in cosmosDBContainerDefinitions: {
+  // parent: cosmosDBDatabase
+  name: cosmosDBContainerDefinition.name
+  properties: {
+    resource: {
+      id: cosmosDBContainerDefinition.name
+      partitionKey: {
+        kind: 'Hash'
+        paths: [
+          cosmosDBContainerDefinition.partitionKey
+        ]
+      }
+    }
+    options: {}
+  }
+}]
+
 resource storageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   name: storageAccountName
   location: 'eastus'
