@@ -36,6 +36,9 @@ var storageAccountName = 'toywebsite${uniqueString(resourceGroup().id)}'
 var logAnalyticsWorkspaceName = 'logAnalyticsWorkspaceName'
 var cosmosDBAccountDiagnosticSettingsName = 'cosmosDBAccountDiagnosticSettingsName'
 
+output hostname string = '${cosmosDBAccountDiagnosticSettingsName}.azurewebsites.net'
+output hostname2 string = cosmosDBAccountDiagnosticSettingsName
+
 var environmentConfigurationMap = {
   Production: {
     enableLogging: true
