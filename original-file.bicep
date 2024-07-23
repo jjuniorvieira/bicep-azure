@@ -28,10 +28,36 @@ param roleDefinitionId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 param webSiteName string = 'webSite${uniqueString(resourceGroup().id)}'
 param container1Name string = 'productspecs'
 param productmanualsName string = 'productmanuals'
+param environmentType string = 'ota'
 
 var hostingPlanName = 'hostingplan${uniqueString(resourceGroup().id)}'
 var sqlserverName = 'toywebsite${uniqueString(resourceGroup().id)}'
 var storageAccountName = 'toywebsite${uniqueString(resourceGroup().id)}'
+var logAnalyticsWorkspaceName = 'logAnalyticsWorkspaceName'
+var cosmosDBAccountDiagnosticSettingsName = 'cosmosDBAccountDiagnosticSettingsName'
+
+var environmentConfigurationMap = {
+  Production: {
+    enableLogging: true
+  }
+  Test: {
+    enableLogging: false
+  }
+}
+
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = if (environmentConfigurationMap[environmentType].enableLogging) {
+  name: logAnalyticsWorkspaceName
+  location: location
+}
+
+resource cosmosDBAccountDiagnostics 'Microsoft.Insights/diagnosticSettings@2017-05-01-preview' = if (environmentConfigurationMap[environmentType].enableLogging) {
+  // scope: cosmosDBAccount
+  name: cosmosDBAccountDiagnosticSettingsName
+  properties: {
+    workspaceId: logAnalyticsWorkspace.id
+    // ...
+  }
+}
 
 var cosmosDBContainerDefinitions = [
   {
