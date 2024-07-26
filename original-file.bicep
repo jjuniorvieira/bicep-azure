@@ -53,6 +53,12 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03
   location: location
 }
 
+//single line of comment
+
+/*
+* multiple lines of comment
+*/
+
 resource cosmosDBAccountDiagnostics 'Microsoft.Insights/diagnosticSettings@2017-05-01-preview' = if (environmentConfigurationMap[environmentType].enableLogging) {
   // scope: cosmosDBAccount
   name: cosmosDBAccountDiagnosticSettingsName
@@ -148,6 +154,7 @@ resource sqlserverName_AllowAllAzureIPs 'Microsoft.Sql/servers/firewallRules@201
     sqlserver
   ]
 }
+
 
 resource productmanuals 'Microsoft.Storage/storageAccounts/blobServices/containers@2019-06-01' = {
   name: '${storageAccount.name}/default/${productmanualsName}'
