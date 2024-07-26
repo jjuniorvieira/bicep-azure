@@ -1,3 +1,4 @@
+@description('The Azure region into which the resources should be deployed.')
 param location string = resourceGroup().location
 
 @allowed([
@@ -36,7 +37,9 @@ var storageAccountName = 'toywebsite${uniqueString(resourceGroup().id)}'
 var logAnalyticsWorkspaceName = 'logAnalyticsWorkspaceName'
 var cosmosDBAccountDiagnosticSettingsName = 'cosmosDBAccountDiagnosticSettingsName'
 
+@description('The default host name of the App Service app.')
 output hostname string = '${cosmosDBAccountDiagnosticSettingsName}.azurewebsites.net'
+
 output hostname2 string = cosmosDBAccountDiagnosticSettingsName
 
 var environmentConfigurationMap = {
@@ -47,6 +50,10 @@ var environmentConfigurationMap = {
     enableLogging: false
   }
 }
+
+
+@description('Indicates whether the web application firewall policy should be enabled.')
+var enableWafPolicy = (environmentType == 'prod')
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = if (environmentConfigurationMap[environmentType].enableLogging) {
   name: logAnalyticsWorkspaceName
