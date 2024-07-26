@@ -110,6 +110,12 @@ resource cosmosDBContainers 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/
 resource storageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   name: storageAccountName
   location: 'eastus'
+  tags: {
+    CostCenter: 'Marketing'
+    DataClassification: 'Public'
+    Owner: 'WebsiteTeam'
+    Environment: 'Production'
+  }
   sku: {
     name: 'Standard_LRS'
   }
