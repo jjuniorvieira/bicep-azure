@@ -224,6 +224,7 @@ resource roleassignment 'Microsoft.Authorization/roleAssignments@2020-04-01-prev
     principalType: 'ServicePrincipal'
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionId)
     principalId: msi.properties.principalId
+    description: 'Contributor access on the storage account is required to enable the application to create blob containers and upload blobs.'
   }
 }
 
